@@ -109,7 +109,7 @@ def getNotes(schoolName, userid, course):
 @app.routes("/<schoolName>/<userid>/<course>/addHW", methods=["POST"])
 def addHW(schoolName, userid, course):
     db = client[schoolName]
-    col = db["course"]
+    col = db["courses"]
 
     content = request.get_json(force=True)
 
@@ -118,6 +118,23 @@ def addHW(schoolName, userid, course):
     col.update_one({"code": course}, {'$push': {'homework': newHW }})
 
     return jsonify({ "success": True })
+
+# get HW
+@app.routes("/<schoolName>/<userid>/<course>/getHW", methods=["GET"])
+def getHW(schoolName, userid, course):
+    db = client[schoolName]
+    col = db["courses"]
+
+    pipeline = [
+        { "$match": { "course": course}}
+    ]
+
+    hw = col.aggregate(pipeline)
+    hw = hw["homework"]
+
+    return jsonify({
+        "homework": hw
+    })
 
 # run Flask app
 if __name__ == "__main__":
