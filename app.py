@@ -43,9 +43,9 @@ def login():
 
     db = client[school_name]
     col = db['users']
-    pw = col.find_one({"studentnumber": content["number"] }, {"password": 1})
+    pw = col.find_one({"studentnumber": content["number"] }, {"password": 1, "school": 1})
     if (content["password"] == pw["password"]):
-        return jsonify({ "studentnumber": content["number"], "success" : True })
+        return jsonify({ "school": pw["school"], "success" : True })
 
 # show courses 
 @app.route("/<schoolName>/<userid>/courses", methods=["GET", "POST"])
