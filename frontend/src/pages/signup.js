@@ -15,12 +15,12 @@ function SignUp() {
         // add error handling
         fetch("http://localhost:5000/signup", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: {
+            headers: {"Content-Type": "text/plain"},
+            body: JSON.stringify({
                 "number": userid,
                 "password": password,
                 "school": school
-            }
+            })
         }).then(response => response.json()).then((data) => {
             if (data.success === true) {
                 setLocation("/courses");

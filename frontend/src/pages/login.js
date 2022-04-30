@@ -1,6 +1,3 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import { React, Component, useState, setState } from "react";
 import { Router, Link, useLocation } from "wouter";
 
@@ -11,13 +8,13 @@ function Login() {
         const userid = document.getElementById("userid").value;
         const password = document.getElementById("pw").value;
 
-        fetch("http://localhost:5000login", {
+        fetch("http://localhost:5000/login", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: {
+            headers: {"Content-Type": "text/plain"},
+            body: JSON.stringify({
                 "number": userid,
                 "password": password
-            }
+            })
         }).then(response => response.json()).then((data) => {
             if (data.success === true) {
                 sessionStorage.setItem("user", userid);
