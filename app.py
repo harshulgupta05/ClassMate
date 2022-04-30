@@ -47,14 +47,29 @@ def login():
 
 
 
-@app.route("/<schoolName>/<userid>/courses")
+@app.route("/<schoolName>/<userid>/courses", methods=["GET", "POST"])
 def courses(schoolName, userid):
     db = client[schoolName]
     col = db["users"]
 
-    courses = col.find_one({"studentnumber": userid}, {"courses": 1})
-    return jsonify({ "courses": courses})
+    #courses = col.findOne({"studentnumber": userid}).select({"courses": 1})
+    courses = col.find_one({"studentnumber": userid})
+    return courses
 
+@app.route("/<schoolName>/<userid>/addCourse", methods=["GET", "POST"])
+def addCourse(schoolName, userid):
+    content = request.get_json(force=True)
+
+    db = client[schoolName]
+    col = db["users"]
+
+    col.update_one({"studentnumber": userid}, {'$push': {'courses': content["course"]}})
+
+    col = db[content["course"]]
+
+    return jsonify({"success": True})    
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# TODO: fix courses (make it return Array), add Notes/HW and chat features
