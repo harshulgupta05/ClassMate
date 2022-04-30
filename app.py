@@ -19,32 +19,42 @@ try:
 except Exception as e:
     print("Database not connected.")
 
-# navigate to the ClassMate database
-db = client['ClassMate']
-
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     content = request.get_json(force=True)
+
+    school_name = content["school"].replace(" ", "")
+
+    db = client[school_name]
     col = db['users']
-    dict = { "studentnumber": content["number"], "password": content["password"], "school": content["school"] }
+    dict = { "studentnumber": content["number"], "password": content["password"], "school": content["school"], "courses": [] }
 
     insert = col.insert_one(dict)
-
-    # return redirect(url_for(app.courses))
+    return jsonify({"success": True})
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     content = request.get_json(force=True)
 
-    col = db['users']
-    pw = col.find_one({"studentnumber": content.number }, {"password": 1})
-    if (content.password == pw["password"]):
-        return jsonify({ "studentnumber": content.number, "success" : True })
+    school_name = content["school"].replace(" ", "")
 
-@app.route("/<schoolid>/courses")
-def classes(schoolid):
-    col = db[schoolid]
+    db = client[school_name]
+    col = db['users']
+    pw = col.find_one({"studentnumber": content["number"] }, {"password": 1})
+    if (content["password"] == pw["password"]):
+        return jsonify({ "studentnumber": content["number"], "success" : True })
+
+
+
+@app.route("/<schoolName>/<userid>/courses")
+def courses(schoolName, userid):
+    db = client[schoolName]
+    col = db["users"]
+
+    courses = col.find_one({"studentnumber": userid}, {"courses": 1})
+    return jsonify({ "courses": courses})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
