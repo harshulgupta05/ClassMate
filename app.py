@@ -19,6 +19,7 @@ try:
 except Exception as e:
     print("Database not connected.")
 
+# signup call
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     content = request.get_json(force=True)
@@ -32,7 +33,7 @@ def signup():
     insert = col.insert_one(dict)
     return jsonify({"success": True})
 
-
+# login call
 @app.route("/login", methods=["GET", "POST"])
 def login():
     content = request.get_json(force=True)
@@ -45,8 +46,7 @@ def login():
     if (content["password"] == pw["password"]):
         return jsonify({ "studentnumber": content["number"], "success" : True })
 
-
-
+# show courses (TODO)
 @app.route("/<schoolName>/<userid>/courses", methods=["GET", "POST"])
 def courses(schoolName, userid):
     db = client[schoolName]
@@ -56,6 +56,7 @@ def courses(schoolName, userid):
     courses = col.find_one({"studentnumber": userid})
     return courses
 
+# add courses 
 @app.route("/<schoolName>/<userid>/addCourse", methods=["GET", "POST"])
 def addCourse(schoolName, userid):
     content = request.get_json(force=True)
@@ -69,6 +70,7 @@ def addCourse(schoolName, userid):
 
     return jsonify({"success": True})
 
+# add notes (TODO)
 @app.route("/<schoolName>/<userid>/<course>/addNote")
 def addNote(schoolName, userid, course):
     db = client[schoolName]
