@@ -3,7 +3,7 @@ from flask_mongoengine import MongoEngine
 from dotenv import load_dotenv
 from pymongo import MongoClient
 
-import datetime
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -67,7 +67,21 @@ def addCourse(schoolName, userid):
 
     col = db[content["course"]]
 
-    return jsonify({"success": True})    
+    return jsonify({"success": True})
+
+@app.route("/<schoolName>/<userid>/<course>/addNote")
+def addNote(schoolName, userid, course):
+    db = client[schoolName]
+    col = db[course]
+
+    image = request.files["image"]
+    col.save_file(image.filename, image)
+
+    note = { "user": userid, "timestamp": datetime.now(), "file": image.filename}
+
+    col.insert_one(note)
+
+    return({"success": True})
 
 if __name__ == "__main__":
     app.run(debug=True)
