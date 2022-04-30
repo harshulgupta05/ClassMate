@@ -67,10 +67,10 @@ def addCourse(schoolName, userid):
 
     col.update_one({"studentnumber": userid}, {'$push': {'courses': content["course"]}})
 
-    if (content["course"] not in db.list_collection_names()):
-        col = db[content["course"]]
-        courseModel = { "notes": [], "homework": [], "chat": []}
-        col.insert_one(courseModel)
+    col = db["courses"]
+
+    if (col.find_one({"code": content["course"]}) == None):
+        col.insert_one({"code": content["course"], "notes": [], "homework": [], "chat": []})
 
     return jsonify({"success": True})
 
@@ -84,7 +84,7 @@ def addNote(schoolName, userid, course):
 
     note = { "user": userid, "timestamp": datetime.now(), "file": content["image"]}
 
-    col.update_one({'$push': {'notes': note }})
+    col.update_one({"code": course}, {'$push': {'notes': note }})
 
     return jsonify({"success": True})
 
@@ -98,7 +98,7 @@ def addHW(schoolName, userid, course):
 
     newHW = { "user": userid, "timetamp": datetime.now(), "file": content["image"]}
 
-    col.update_one({'$push': {'homework': newHW }})
+    col.update_one({"code": course}, {'$push': {'homework': newHW }})
 
     return jsonify({ "success": True })
 
