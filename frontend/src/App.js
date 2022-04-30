@@ -1,9 +1,13 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import {Router, Link} from "wouter";
+// import {Router, Link} from "wouter";
 import React, { useState, useEffect } from "react";
-import PageRouter from "./components/router.jsx";
+// import PageRouter from "./components/router.jsx";
 import useHashLocation from "./hooks/wouter-hash";
+import Home from './pages/home';
+import { Router, Route} from "wouter";
+import SignUp from './pages/signup';
+import Login from './pages/login';
 
 function App() {
   return (
@@ -23,12 +27,11 @@ function App() {
     //     </a>
     //   </header>
     // </div>
+
     <Router hook={useHashLocation}>
-      <main role="main" className="wrapper">
-        <div className="content">
-          <PageRouter />
-        </div>
-      </main>
+        <Route path="/" component={Home} />
+        <Route path="/signup" component={SignUp} />
+        <Route path="/login" component={Login} />
     </Router>
   );
 }
