@@ -47,15 +47,22 @@ def login():
     if (content["password"] == pw["password"]):
         return jsonify({ "studentnumber": content["number"], "success" : True })
 
-# show courses (TODO)
+# show courses 
 @app.route("/<schoolName>/<userid>/courses", methods=["GET", "POST"])
 def courses(schoolName, userid):
     db = client[schoolName]
     col = db["users"]
 
-    #courses = col.findOne({"studentnumber": userid}).select({"courses": 1})
-    courses = col.find_one({"studentnumber": userid})
-    return courses
+    pipeline = [
+        { "$match": {"studentnumber": userid } }
+    ]
+
+    res = col.aggregate(pipeline)
+    res = res["courses"]
+
+    return jsonify({
+        "courses": res
+    })
 
 # add courses 
 @app.route("/<schoolName>/<userid>/addCourse", methods=["GET", "POST"])
