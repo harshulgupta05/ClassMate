@@ -21,7 +21,7 @@ except Exception as e:
     print("Database not connected.")
 
 # signup call
-@app.route("/signup", methods=["GET", "POST"])
+@app.route("/signup", methods=["POST"])
 def signup():
     content = request.get_json(force=True)
 
@@ -113,7 +113,7 @@ def getNotes(schoolName, userid, course):
     })
 
 # add HW
-@app.routes("/<schoolName>/<userid>/<course>/addHW", methods=["POST"])
+@app.route("/<schoolName>/<userid>/<course>/addHW", methods=["POST"])
 def addHW(schoolName, userid, course):
     db = client[schoolName]
     col = db["courses"]
@@ -127,7 +127,7 @@ def addHW(schoolName, userid, course):
     return jsonify({ "success": True })
 
 # get HW
-@app.routes("/<schoolName>/<userid>/<course>/getHW", methods=["GET"])
+@app.route("/<schoolName>/<userid>/<course>/getHW", methods=["GET"])
 def getHW(schoolName, userid, course):
     db = client[schoolName]
     col = db["courses"]
