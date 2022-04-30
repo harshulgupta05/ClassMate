@@ -1,3 +1,4 @@
+from sqlite3 import connect
 from flask import Flask, jsonify, request, redirect, url_for, current_app
 from flask_mongoengine import MongoEngine
 from dotenv import load_dotenv
@@ -70,20 +71,33 @@ def addCourse(schoolName, userid):
 
     return jsonify({"success": True})
 
-# add notes (TODO)
+# add notes
 @app.route("/<schoolName>/<userid>/<course>/addNote")
 def addNote(schoolName, userid, course):
     db = client[schoolName]
     col = db[course]
 
-    image = request.files["image"]
-    col.save_file(image.filename, image)
+    content = request.get_json(force=True)
 
-    note = { "user": userid, "timestamp": datetime.now(), "file": image.filename}
+    note = { "user": userid, "timestamp": datetime.now(), "file": content["image"]}
 
     col.insert_one(note)
 
-    return({"success": True})
+    return jsonify({"success": True})
+
+# add HW
+@app.routes("/<schoolName>/<userid>/<couse>/addHW")
+def addHW(schoolName, userid, course):
+    db = client[schoolName]
+    col = db[course]
+
+    content = request.get_json(force=True)
+
+    newHW = { "user": userid, "timetamp": datetime.now(), "file": content["image"]}
+
+    col.insert_one(newHW)
+
+    return jsonify({ "success": True })
 
 if __name__ == "__main__":
     app.run(debug=True)
