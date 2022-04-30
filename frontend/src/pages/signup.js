@@ -23,7 +23,7 @@ function SignUp() {
             }
         }).then(response => response.json()).then((data) => {
             if (data.success === true) {
-                setLocation(`/courses`);
+                setLocation("/courses");
             }
         });
     }
