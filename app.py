@@ -78,7 +78,7 @@ def addCourse(schoolName, userid):
 @app.route("/<schoolName>/<userid>/<course>/addNote", methods=["POST"])
 def addNote(schoolName, userid, course):
     db = client[schoolName]
-    col = db[course]
+    col = db["courses"]
 
     content = request.get_json(force=True)
 
@@ -88,11 +88,28 @@ def addNote(schoolName, userid, course):
 
     return jsonify({"success": True})
 
+# get notes
+@app.route("/<schoolName>/<userid>/<course>/notes", methods=["GET"])
+def getNotes(schoolName, userid, course):
+    db = client[schoolName]
+    col = db["courses"]
+
+    pipeline = [
+        { "$match": { "course": course} }
+    ]
+
+    notes = col.aggregate(pipeline)
+    notes = notes["notes"]
+
+    return jsonify({
+        "notes": notes
+    })
+
 # add HW
-@app.routes("/<schoolName>/<userid>/<couse>/addHW", methods=["POST"])
+@app.routes("/<schoolName>/<userid>/<course>/addHW", methods=["POST"])
 def addHW(schoolName, userid, course):
     db = client[schoolName]
-    col = db[course]
+    col = db["course"]
 
     content = request.get_json(force=True)
 
