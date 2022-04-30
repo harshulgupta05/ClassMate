@@ -72,7 +72,7 @@ def addCourse(schoolName, userid):
     return jsonify({"success": True})
 
 # add notes
-@app.route("/<schoolName>/<userid>/<course>/addNote")
+@app.route("/<schoolName>/<userid>/<course>/addNote", methods=["POST"])
 def addNote(schoolName, userid, course):
     db = client[schoolName]
     col = db[course]
@@ -86,7 +86,7 @@ def addNote(schoolName, userid, course):
     return jsonify({"success": True})
 
 # add HW
-@app.routes("/<schoolName>/<userid>/<couse>/addHW")
+@app.routes("/<schoolName>/<userid>/<couse>/addHW", methods=["POST"])
 def addHW(schoolName, userid, course):
     db = client[schoolName]
     col = db[course]
@@ -99,7 +99,8 @@ def addHW(schoolName, userid, course):
 
     return jsonify({ "success": True })
 
+# run Flask app
 if __name__ == "__main__":
     app.run(debug=True)
 
-# TODO: fix courses (make it return Array), add Notes/HW and chat features
+# TODO: fix courses (make it return Array), read Notes/HW and chat features
