@@ -48,7 +48,7 @@ def login():
         return jsonify({ "school": pw["school"], "success" : True })
 
 # show courses 
-@app.route("/<schoolName>/<userid>/courses", methods=["GET", "POST"])
+@app.route("/<schoolName>/<userid>/courses", methods=["GET"])
 def courses(schoolName, userid):
     db = client[schoolName]
     col = db["users"]
@@ -65,7 +65,7 @@ def courses(schoolName, userid):
     })
 
 # add courses 
-@app.route("/<schoolName>/<userid>/addCourse", methods=["GET", "POST"])
+@app.route("/<schoolName>/<userid>/addCourse", methods=["POST"])
 def addCourse(schoolName, userid):
     content = request.get_json(force=True)
 
