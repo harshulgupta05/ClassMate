@@ -7,13 +7,14 @@ function AddCourse() {
     const addCourse = () => {
         const userid = sessionStorage.getItem("user");
         const school = sessionStorage.getItem("school");
-        const course = document.getElementById("courseCode");
+        const code = document.getElementById("courseCode").value;
 
         fetch(`http://localhost:5000/${school}/${userid}/addCourse`, {
             method: "POST",
             headers: {"Content-Type": "text/plain"},
+            mode: "cors",
             body: JSON.stringify({
-                "course": course
+                "course": code
             })
         }).then(response => response.json()).then((data) => {
             if (data.success === true) {
@@ -34,7 +35,7 @@ function AddCourse() {
                     </h2>
                     <div className="form-group text-center">
                         <label for="User ID" className="mx-2 form-label">Course Code (e.g. SCH4U)</label>
-                        <input type="text" id="userid" placeholder="######" className="m-auto pl-3 form-control w-75" />
+                        <input type="text" id="courseCode" placeholder="######" className="m-auto pl-3 form-control w-75" />
                     </div>
                     <div className="text-center">
                         <button onClick={addCourse} type="submit" className="btn btn=primary text-center m-2">Add Course</button>

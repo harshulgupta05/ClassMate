@@ -8,6 +8,7 @@ function Login() {
         const userid = document.getElementById("userid").value;
         const password = document.getElementById("pw").value;
         const school = document.getElementById("school").value;
+        const sch = school.split(' ').join('');
 
         fetch("http://localhost:5000/login", {
             method: "POST",
@@ -21,8 +22,8 @@ function Login() {
         }).then(response => response.json()).then(data => {
             if (data.success === "true") {
                 console.log("success");
-                sessionStorage.setItem("user", userid);
-                sessionStorage.setItem("school", school);
+                sessionStorage.setItem("user", userid);                
+                sessionStorage.setItem("school", sch);
                 setLocation("/courses");
             }
             else {
