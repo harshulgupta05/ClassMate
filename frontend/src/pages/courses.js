@@ -3,120 +3,71 @@ import { Router, Link, useLocation } from "wouter";
 
 function Courses() {
     const [location, setLocation] = useLocation();
+    const [currCourses, setcurrCourses] = useState([]);
+    const [fetched, setFetched] = useState(false);
 
     const userid = sessionStorage.getItem("user");
-    const school = sessionStorage.getItem("school");
+    const originalSchool = sessionStorage.getItem("school");
+    const school = originalSchool.split(' ').join('');
 
-    const courses = fetch(`http://localhost:5000/${school}/${userid}/courses`, {
-        method: "GET"
-    }).then(response => response.json()).then((data) => {
-        if (data.courses.length === 0) {
-            setLocation("/courses");
-        }
+    if (fetched == false) {
+        fetch(`http://localhost:5000/${school}/${userid}/courses`, {
+            method: "GET",
+            mode: "cors"
+        }).then(response => response.json()).then((data) => {
+            console.log(data.courses[0]);
+            const length = data.courses.length;
 
-        // TODO: send course code to courseHome page (sessionStorage)
-        if (data.courses.length == 1) {
-            return (
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[0].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                        <div className="col">
-                            <button onClick={setLocation("/addCourse")} className="btn btn-primary">Add Another Course</button>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <button onClick={setLocation("/addCourse")} className="btn btn-primary">Add Another Course</button>
-                        </div>
-                        <div className="col">
-                            <button onClick={setLocation("/addCourse")} className="btn btn-primary">Add Another Course</button>
-                        </div>
-                    </div>
-                </div>
-            );         
-        }
+            if (data.courses.length === 0) {
+                setLocation("/addCourse");
+            }
+            else if (data.courses.length == 1) {
+                setcurrCourses(currCourses => [...currCourses, data.courses[0]]);
+            }
+            else if (data.courses.length == 2) {
+                setcurrCourses(currCourses => [...currCourses, data.courses[0]]);
+                setcurrCourses(currCourses => [...currCourses, data.courses[1]]);
+            }
+            else if (data.courses.length == 3) {
+                setcurrCourses(currCourses => [...currCourses, data.courses[0]]);
+                setcurrCourses(currCourses => [...currCourses, data.courses[1]]);
+                setcurrCourses(currCourses => [...currCourses, data.courses[2]]);
+            }
+            else if (data.courses.length == 4) {
+                setcurrCourses(currCourses => [...currCourses, data.courses[0]]);
+                setcurrCourses(currCourses => [...currCourses, data.courses[1]]);
+                setcurrCourses(currCourses => [...currCourses, data.courses[2]]);
+                setcurrCourses(currCourses => [...currCourses, data.courses[3]]);
+            }
 
-        if (data.courses.length == 2) {
-            return (
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[0].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[1].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <button onClick={setLocation("/addCourse")} className="btn btn-primary">Add Another Course</button>
-                        </div>
-                        <div className="col">
-                            <button onClick={setLocation("/addCourse")} className="btn btn-primary">Add Another Course</button>
-                        </div>
-                    </div>
-                </div>
-            );         
-        }
+            setcurrCourses(currCourses => [...new Set(currCourses)]);
 
-        if (data.courses.length == 3) {
-            return (
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[0].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[1].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[2].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                        <div className="col">
-                            <button onClick={setLocation("/addCourse")} className="btn btn-primary">Add Another Course</button>
-                        </div>
-                    </div>
-                </div>
-            );         
-        }
+            setFetched(true);            
+        });
+    }
 
-        if (data.courses.length == 3) {
-            return (
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[0].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[1].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <h4 className="display-4">{data.courses[2].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                        <div className="col">
-                        <h4 className="display-4">{data.courses[3].code}</h4>
-                            <button onClick={setLocation("/courseHome")} className="btn btn-primary">Go To Course</button>
-                        </div>
-                    </div>
-                </div>
-            );         
-        }
-    });
+    const courseSelected = (code) => {
+        setLocation("/course");
+        sessionStorage.setItem("course", code);
+    }
+
+    const button = (name) => {
+        return (
+            <div>
+                <button onClick={courseSelected(name)} className="btn btn-primary">{name}</button>
+            </div>
+        );        
+    }
+
+    return (
+        <div>
+            {
+                currCourses.map((number) => {
+                    return button(number);
+                })
+            }
+        </div>
+    );
 }
 
 export default Courses;
