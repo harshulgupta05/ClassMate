@@ -1,89 +1,98 @@
-import { React, Component, useState, setState } from "react";
-import { Router, Link, useLocation, Redirect } from "wouter";
+import React, { useState } from "react";
+import { useLocation } from "wouter";
+import { Helmet } from "react-helmet-async";
+
+import { Divider as MuiDivider, Button, Paper, Card as MuiCard, CardHeader, CardContent, CardActions, Grid, TextField as MuiTextField, Typography } from "@mui/material"
+import styled from "styled-components/macro";
+import { spacing } from "@mui/system";
+
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import NotesIcon from '@mui/icons-material/Notes';
+
+const Wrapper = styled(Paper)`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background-color: #233044!important;
+`;
+
+const Card = styled(MuiCard)`
+    padding: 20px;
+    width: 350px;
+    height: 350px;
+    margin: auto;
+`;
+
+const TextField = styled(MuiTextField)(spacing);
 
 function AddNote() {
     const [location, setLocation] = useLocation();
 
-    const userid = sessionStorage.getItem("user");
-    const school = sessionStorage.getItem("school");
-    const code = sessionStorage.getItem("course");
+    const [body, setBody] = useState('');
 
-    const checkUploadResult = (resultEvent) => {
-        if (resultEvent.event === "success") {
-            console.log(resultEvent.info);
+    const pageTitle = "Add Note"
 
-            fetch(`http://localhost:5000/${school}/${userid}/${code}/addNote`, {
-                method: "POST",
-                headers: {"Content-Type": "text/plain"},
-                mode: "cors",
-                body: JSON.stringify({
-                    "file": resultEvent.info.secure_url
-                })
-            }).then(response => response.json()).then((data) => {
+    const handleTextChange = (e, target) => {
+        setBody(e.target.value);
+    }
+
+    const addNote = () => {
+        const userid = sessionStorage.getItem("user");
+        const school = sessionStorage.getItem("school");
+        const code = sessionStorage.getItem("course");
+        const sch = school.split(' ').join('');
+        
+        fetch(`http://localhost:5000/${sch}/${userid}/${code}/addNote`, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            mode: "cors",
+            body: JSON.stringify({
+                "note": body
+            }),
+        }).then(response => response.json()).then(data => {
+            if (data.success === "true") {
+                console.log("success");
+                alert("Successfully uploaded note.");
                 setLocation("/course");
-            });
-        }
-    }
-
-    function showUploadWidget() { 
-        window.cloudinary.openUploadWidget({
-            cloudName: "detyf81gh",
-            uploadPreset: "ClassMate",
-            sources: ["local"],
-            showAdvancedOptions: true,
-            cropping: true,
-            multiple: false,
-            defaultSource: "local",
-            styles: { 
-                palette: {
-                    window: "#FFFFFF",
-                    windowBorder: "#90A0B3",
-                    tabIcon: "#0078FF",
-                    menuIcons: "#5A616A",
-                    textDark: "#000000",
-                    textLight: "#FFFFFF",
-                    link: "#0078FF",
-                    action: "#FF620C",
-                    inactiveTabIcon: "#0E2F5A",
-                    error: "#F44235",
-                    inProgress: "#0078FF",
-                    complete: "#20B832",
-                    sourceBg: "#E4EBF1"
-                },
-                fonts: {
-                    default: {
-                        active: true
-                    }
-                }    
             }
-        }, (err, info) => {   
-            if (!err) {
-                console.log("Upload Widget event - ", info);
-            }  
-        }); 
-    }
-
-    let widget = window.cloudinary.createUploadWidget({
-        cloudName: "detyf81gh",
-    }, (error, result) => {
-        console.log(result.info.secure_url);
-    });
-
-    const showWidget = () => {
-        widget.open();
-        setLocation("/course");
+            else {
+                alert("Failed to upload note.");
+            }
+        });
     }
 
     return (
-        <div className="w-100 text-center ml-auto mr-auto d-flex justify-content-center pt-5 align-items-center">
-            <h2 className="display-2 text-center">
-                Upload your Note!
-            </h2>
-            <div className="form-group text-center">
-                <label for="noteimage" className="mx-2 form-label">Upload a picture of your notes.</label>
-                <button onClick={showUploadWidget} type="submit" className="btn btn-primary">Submit</button>
-            </div>              
-        </div>
+        <React.Fragment>
+            <Helmet title={pageTitle} />
+            <Wrapper>
+                <Card>
+                    <CardHeader title="Login to ClassMate!" style={{ textAlign: 'center' }} />
+                    <CardContent>
+                        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    type="text"
+                                    label="Enter note here..."
+                                    placeholder="Enter note here..."
+                                    maxRows={10}
+                                    fullWidth
+                                    value={body}
+                                    size="small"
+                                    onChange={(e) => handleTextChange(e, "userid")}
+                                />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                    <CardActions>
+                        <Grid container direction="row" justifyContent="center" alignItems="center">
+                            <Grid item>
+                                <Button size="large" variant="contained" style={{ width: 120 }} startIcon={<NotesIcon />} onClick={addNote}>ADD NOTE</Button>
+                            </Grid>
+                        </Grid>
+                    </CardActions>
+                </Card>
+            </Wrapper>
+        </React.Fragment>
     );
 }
 
