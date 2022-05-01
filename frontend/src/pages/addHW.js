@@ -66,14 +66,14 @@ function AddHW() {
             <Helmet title={pageTitle} />
             <Wrapper>
                 <Card>
-                    <CardHeader title="Add your Note" style={{ textAlign: 'center' }} />
+                    <CardHeader title="Add your HW" style={{ textAlign: 'center' }} />
                     <CardContent>
                         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
                             <Grid item xs={12}>
                                 <TextField
                                     type="text"
-                                    label="Enter note here..."
-                                    placeholder="Enter note here..."
+                                    label="Enter HW here..."
+                                    placeholder="Enter HW here..."
                                     maxRows={10}
                                     fullWidth
                                     value={body}
@@ -86,7 +86,7 @@ function AddHW() {
                     <CardActions>
                         <Grid container direction="row" justifyContent="center" alignItems="center">
                             <Grid item>
-                                <Button size="large" variant="contained" style={{ width: 120 }} startIcon={<NotesIcon />} onClick={addHW}>ADD NOTE</Button>
+                                <Button size="large" variant="contained" style={{ width: 120 }} startIcon={<NotesIcon />} onClick={addHW}>ADD HW</Button>
                             </Grid>
                         </Grid>
                     </CardActions>
