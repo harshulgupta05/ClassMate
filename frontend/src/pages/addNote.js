@@ -66,7 +66,7 @@ function AddNote() {
             <Helmet title={pageTitle} />
             <Wrapper>
                 <Card>
-                    <CardHeader title="Login to ClassMate!" style={{ textAlign: 'center' }} />
+                    <CardHeader title="Add your Note" style={{ textAlign: 'center' }} />
                     <CardContent>
                         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
                             <Grid item xs={12}>
