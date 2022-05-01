@@ -34,7 +34,7 @@ function Course() {
     }
 
     const toHW = () => {
-        setLocation(`/HW`);
+        setLocation(`/homework`);
     }
 
     const toCourses = () => {

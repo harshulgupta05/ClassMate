@@ -14,6 +14,8 @@ import Course from './pages/course';
 import AddNote from './pages/addNote';
 import Notes from './pages/notes';
 import { HelmetProvider, Helmet } from "react-helmet-async";
+import AddHW from './pages/addHW';
+import Homework from './pages/homework';
 
 
 function App() {
@@ -46,6 +48,8 @@ function App() {
         <Route path="/course" component={Course} />
         <Route path="/addNotes" component={AddNote} />
         <Route path="/notes" component={Notes} />
+        <Route path="/addHW" component={AddHW} />
+        <Route path="/homework" component={Homework} />
       </Router>
     </HelmetProvider>
   );
