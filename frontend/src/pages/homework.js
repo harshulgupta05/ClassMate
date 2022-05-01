@@ -70,8 +70,8 @@ function Homework() {
             method: "GET",
             mode: "cors"
         }).then(response => response.json()).then(data => {
-            for (var i = 0; i < data.notes.length; i++) {
-                currNotes[i] = data.notes[i];
+            for (var i = 0; i < data.homework.length; i++) {
+                currNotes[i] = data.homework[i];
             }
 
             console.log(currNotes);
