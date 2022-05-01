@@ -16,6 +16,7 @@ function SignUp() {
         fetch("http://localhost:5000/signup", {
             method: "POST",
             headers: {"Content-Type": "text/plain"},
+            mode: "cors",
             body: JSON.stringify({
                 "number": userid,
                 "password": password,
@@ -23,6 +24,8 @@ function SignUp() {
             })
         }).then(response => response.json()).then((data) => {
             if (data.success === true) {
+                console.log("successful")
+                alert("Sign Up Successful");
                 setLocation("/addCourse");
             }
         });
