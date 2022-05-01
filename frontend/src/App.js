@@ -10,7 +10,7 @@ import SignUp from './pages/signup';
 import Login from './pages/login';
 import Courses from './pages/courses';
 import AddCourse from './pages/addCourse';
-import CourseHome from './pages/course';
+import Course from './pages/course';
 import AddNote from './pages/addNote';
 import Notes from './pages/notes';
 import { HelmetProvider, Helmet } from "react-helmet-async";
@@ -43,7 +43,9 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/courses" component={Courses} />
         <Route path="/addCourse" component={AddCourse} />
-        <Route path="/courseHome" component={CourseHome} />
+        <Route path="/course" component={Course} />
+        <Route path="/addNotes" component={AddNote} />
+        <Route path="/notes" component={Notes} />
       </Router>
     </HelmetProvider>
   );
