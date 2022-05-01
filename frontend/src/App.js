@@ -10,6 +10,7 @@ import SignUp from './pages/signup';
 import Login from './pages/login';
 import Courses from './pages/courses';
 import AddCourse from './pages/addCourse';
+import Course from './pages/course';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/courses" component={Courses} />
         <Route path="/addCourse" component={AddCourse} />
+        <Route path="/course" component={Course} />
     </Router>
   );
 }
