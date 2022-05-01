@@ -8,6 +8,8 @@ import Home from './pages/home';
 import { Router, Route} from "wouter";
 import SignUp from './pages/signup';
 import Login from './pages/login';
+import Courses from './pages/courses';
+import AddCourse from './pages/addCourse';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
         <Route path="/" component={Home} />
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
+        <Route path="/courses" component={Courses} />
+        <Route path="/addCourse" component={AddCourse} />
     </Router>
   );
 }
