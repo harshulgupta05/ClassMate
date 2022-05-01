@@ -10,7 +10,11 @@ import SignUp from './pages/signup';
 import Login from './pages/login';
 import Courses from './pages/courses';
 import AddCourse from './pages/addCourse';
-import Course from './pages/course';
+import CourseHome from './pages/course';
+import AddNote from './pages/addNote';
+import Notes from './pages/notes';
+import { HelmetProvider, Helmet } from "react-helmet-async";
+
 
 function App() {
   return (
@@ -31,14 +35,17 @@ function App() {
     //   </header>
     // </div>
 
-    <Router hook={useHashLocation}>
+    <HelmetProvider>
+      <Helmet titleTemplate='%s | ClassMate' defaultTitle="Welcome to ClassMate!" />
+      <Router>
         <Route path="/" component={Home} />
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
         <Route path="/courses" component={Courses} />
         <Route path="/addCourse" component={AddCourse} />
-        <Route path="/course" component={Course} />
-    </Router>
+        <Route path="/courseHome" component={CourseHome} />
+      </Router>
+    </HelmetProvider>
   );
 }
 

@@ -106,7 +106,9 @@ def addNote(schoolName, userid, course):
 
     col.update_one({"code": course}, {'$push': {'notes': note }})
 
-    return jsonify({"success": True})
+    resp = jsonify({"success": True})
+    resp.headers.add('Access-Control-Allow-Origin', '*')
+    return resp
 
 # get notes
 @app.route("/<schoolName>/<course>/notes", methods=["GET"])
