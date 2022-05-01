@@ -71,10 +71,10 @@ function Notes() {
             mode: "cors"
         }).then(response => response.json()).then(data => {
             for (var i = 0; i < data.notes.length; i++) {
-                setcurrNotes(currNotes => [...currNotes, data.notes[i]])
+                currNotes[i] = data.notes[i];
             }
 
-            setcurrNotes(currNotes => [...new Set(currNotes)]);
+            console.log(currNotes);
 
             setFetched(true);
         })
