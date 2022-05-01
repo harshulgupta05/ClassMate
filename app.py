@@ -59,14 +59,14 @@ def courses(schoolName, userid):
     db = client[schoolName]
     col = db["users"]
 
-    pipeline = [
-        { "$match": {"studentnumber": userid } }
-    ]
+    data = list(col.find({"studentnumber": userid}, {"courses": 1, "_id": 0}))
+    data = data[0]
+    print(data)
+    data = jsonify(data)
+    data.headers.add('Access-Control-Allow-Origin', '*')
+    return data
 
-    res = col.aggregate(pipeline)
-    print(res)
-
-    return { "success": True}
+    # return { "success": True}
     # res = res["courses"]
 
     # resp = jsonify({
@@ -90,7 +90,9 @@ def addCourse(schoolName, userid):
     if (col.find_one({"code": content["course"]}) == None):
         col.insert_one({"code": content["course"], "notes": [], "homework": [], "chat": []})
 
-    return jsonify({"success": True})
+    resp = jsonify({"success": True})
+    resp.headers.add('Access-Control-Allow-Origin', '*')
+    return resp
 
 # add notes
 @app.route("/<schoolName>/<userid>/<course>/addNote", methods=["POST"])
