@@ -1,5 +1,5 @@
 import { React, Component, useState, setState } from "react";
-import { Router, Link, useLocation } from "wouter";
+import { Router, Link, useLocation, Redirect } from "wouter";
 
 function Login() {
     const [location, setLocation] = useLocation();
@@ -7,18 +7,23 @@ function Login() {
     const login = () => {
         const userid = document.getElementById("userid").value;
         const password = document.getElementById("pw").value;
+        const school = document.getElementById("school").value;
 
         fetch("http://localhost:5000/login", {
             method: "POST",
             headers: {"Content-Type": "text/plain"},
+            mode: "cors",
             body: JSON.stringify({
                 "number": userid,
-                "password": password
-            })
-        }).then(response => response.json()).then((data) => {
-            if (data.success === true) {
+                "password": password,
+                "school": school
+            }),
+        }).then(response => response.json()).then(data => {
+            if (data.success === "true") {
+                console.log("success");
                 sessionStorage.setItem("user", userid);
-                sessionStorage.setItem("school", data.school);
+                sessionStorage.setItem("school", school);
+                setLocation("/courses");
             }
             else {
                 alert("Login failed. Please try again.");
@@ -40,9 +45,13 @@ function Login() {
                     <div className="form-group text-center">
                         <label for="Password" className="mx-2 form-label">Password</label>
                         <input type="password" id="pw" placeholder="Password" className="m-auto pl-3 form-control w-75" />
-                    </div>                    
+                    </div>
+                    <div className="form-group text-center">
+                        <label for="Password" className="mx-2 form-label">School Name</label>
+                        <input type="text" id="school" placeholder="Lorne Park Secondary School" className="m-auto pl-3 form-control w-75" />
+                    </div>                
                     <div className="text-center">
-                        <button onClick={login} type="submit" className="btn btn=primary text-center m-2">Sign Up</button>
+                        <button onClick={login} type="submit" className="btn btn=primary text-center m-2">Log In</button>
                     </div>
                 </div>
             </div>
