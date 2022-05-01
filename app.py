@@ -1,5 +1,6 @@
+import json
 from sqlite3 import connect
-from flask import Flask, jsonify, request, redirect, url_for, current_app
+from flask import Flask, jsonify, make_response, request, redirect, url_for, current_app
 from flask_mongoengine import MongoEngine
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -32,10 +33,12 @@ def signup():
     dict = { "studentnumber": content["number"], "password": content["password"], "school": content["school"], "courses": [] }
 
     insert = col.insert_one(dict)
-    return jsonify({"success": True})
+    resp = jsonify({"success": True})
+    resp.headers.add('Access-Control-Allow-Origin', '*')
+    return resp
 
 # login call
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["POST"])
 def login():
     content = request.get_json(force=True)
 
@@ -45,7 +48,10 @@ def login():
     col = db['users']
     pw = col.find_one({"studentnumber": content["number"] }, {"password": 1, "school": 1})
     if (content["password"] == pw["password"]):
-        return jsonify({ "school": pw["school"], "success" : True })
+        print("Logged in!")
+        resp = jsonify({"success": "true"})
+        resp.headers.add('Access-Control-Allow-Origin', '*')
+        return resp
 
 # show courses 
 @app.route("/<schoolName>/<userid>/courses", methods=["GET"])
@@ -58,11 +64,16 @@ def courses(schoolName, userid):
     ]
 
     res = col.aggregate(pipeline)
-    res = res["courses"]
+    print(res)
 
-    return jsonify({
-        "courses": res
-    })
+    return { "success": True}
+    # res = res["courses"]
+
+    # resp = jsonify({
+    #     "courses": res
+    # })
+    # resp.headers.add('Access-Control-Allow-Origin', '*')
+    # return resp
 
 # add courses 
 @app.route("/<schoolName>/<userid>/addCourse", methods=["POST"])
