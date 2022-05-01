@@ -137,7 +137,7 @@ def addHW(schoolName, userid, course):
     return resp
 
 # get HW
-@app.route("/<schoolName>/<userid>/<course>/getHW", methods=["GET"])
+@app.route("/<schoolName>/<course>/getHW", methods=["GET"])
 def getHW(schoolName, userid, course):
     db = client[schoolName]
     col = db["courses"]
