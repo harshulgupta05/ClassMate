@@ -130,11 +130,11 @@ def addHW(schoolName, userid, course):
 
     content = request.get_json(force=True)
 
-    newHW = { "user": userid, "timetamp": datetime.now(), "file": content["image"]}
+    col.update_one({"code": course}, {'$push': {'homework': content["homework"] }})
 
-    col.update_one({"code": course}, {'$push': {'homework': newHW }})
-
-    return jsonify({ "success": True })
+    resp = jsonify({"success": "true"})
+    resp.headers.add('Access-Control-Allow-Origin', '*')
+    return resp
 
 # get HW
 @app.route("/<schoolName>/<userid>/<course>/getHW", methods=["GET"])
@@ -142,16 +142,11 @@ def getHW(schoolName, userid, course):
     db = client[schoolName]
     col = db["courses"]
 
-    pipeline = [
-        { "$match": { "course": course}}
-    ]
-
-    hw = col.aggregate(pipeline)
-    hw = hw["homework"]
-
-    return jsonify({
-        "homework": hw
-    })
+    data = list(col.find({"code": course}, {"homework": 1, "_id": 0}).limit(10))
+    data = data[0]
+    data = jsonify(data)
+    data.headers.add('Access-Control-Allow-Origin', '*')
+    return data
 
 # run Flask app
 if __name__ == "__main__":
