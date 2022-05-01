@@ -102,11 +102,11 @@ def addNote(schoolName, userid, course):
 
     content = request.get_json(force=True)
 
-    note = { "user": userid, "timestamp": datetime.now(), "file": content["image"]}
+    # note = { "user": userid, "timestamp": datetime.now(), "file": content["image"]}
 
-    col.update_one({"code": course}, {'$push': {'notes': note }})
+    col.update_one({"code": course}, {'$push': {'notes': content["note"] }})
 
-    resp = jsonify({"success": True})
+    resp = jsonify({"success": "true"})
     resp.headers.add('Access-Control-Allow-Origin', '*')
     return resp
 
