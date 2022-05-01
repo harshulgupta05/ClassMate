@@ -109,21 +109,16 @@ def addNote(schoolName, userid, course):
     return jsonify({"success": True})
 
 # get notes
-@app.route("/<schoolName>/<userid>/<course>/notes", methods=["GET"])
-def getNotes(schoolName, userid, course):
+@app.route("/<schoolName>/<course>/notes", methods=["GET"])
+def getNotes(schoolName, course):
     db = client[schoolName]
     col = db["courses"]
 
-    pipeline = [
-        { "$match": { "course": course} }
-    ]
-
-    notes = col.aggregate(pipeline)
-    notes = notes["notes"]
-
-    return jsonify({
-        "notes": notes
-    })
+    data = list(col.find({"code": course}, {"notes": 1, "_id": 0}).limit(10))
+    data = data[0]
+    data = jsonify(data)
+    data.headers.add('Access-Control-Allow-Origin', '*')
+    return data
 
 # add HW
 @app.route("/<schoolName>/<userid>/<course>/addHW", methods=["POST"])
